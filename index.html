@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Girlfriend, Abby? | Wisdom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #030206;
+            color: #f8fafc;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .font-cursive {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Dark Romantic City Skyline and Water Backdrop */
+        .city-background {
+            background: linear-gradient(to bottom, rgba(3, 2, 8, 0.78), rgba(15, 6, 22, 0.90), rgba(3, 2, 6, 0.98)),
+                        url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* 3D Candle Bag Lantern CSS Construction */
+        .lantern-stage {
+            perspective: 1200px;
+            transform-style: preserve-3d;
+        }
+
+        .lantern-row {
+            transform-style: preserve-3d;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* 3D Box for Paper Lanterns */
+        .lantern-3d {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: gentleFloat 4s ease-in-out infinite alternate;
+        }
+
+        /* Inner warm candle flame simulation */
+        .lantern-box {
+            position: relative;
+            background: radial-gradient(circle at 50% 65%, #fffdf0 0%, #ffc83b 35%, #ff8c00 70%, #d35400 95%);
+            border-radius: 6px;
+            box-shadow: 
+                0 0 15px rgba(255, 180, 0, 0.8),
+                0 0 35px rgba(255, 140, 0, 0.5),
+                inset 0 0 15px rgba(255, 235, 180, 0.9),
+                0 10px 20px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 220, 130, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            transform: translateZ(10px);
+            animation: flicker 3s infinite ease-in-out;
+        }
+
+        /* 3D Side Shadows and Depth */
+        .lantern-3d::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            transform: translateZ(-8px) scale(0.96);
+            border-radius: 6px;
+            filter: blur(4px);
+        }
+
+        .lantern-text {
+            color: #120900;
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            text-shadow: 0 0 2px rgba(255, 255, 250, 0.8);
+            letter-spacing: -0.5px;
+        }
+
+        /* Realistic Flame Flicker */
+        @keyframes flicker {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(255, 180, 0, 0.8), 0 0 35px rgba(255, 140, 0, 0.5), inset 0 0 15px rgba(255, 235, 180, 0.9);
+                filter: brightness(1);
+            }
+            33% {
+                box-shadow: 0 0 22px rgba(255, 200, 50, 0.9), 0 0 45px rgba(255, 100, 0, 0.7), inset 0 0 20px rgba(255, 245, 200, 1);
+                filter: brightness(1.15);
+            }
+            66% {
+                box-shadow: 0 0 12px rgba(255, 160, 0, 0.7), 0 0 28px rgba(230, 80, 0, 0.4), inset 0 0 10px rgba(255, 215, 150, 0.7);
+                filter: brightness(0.92);
+            }
+        }
+
+        @keyframes gentleFloat {
+            0% { transform: translateY(0px) rotateX(2deg) rotateY(-2deg); }
+            100% { transform: translateY(-8px) rotateX(-2deg) rotateY(2deg); }
+        }
+
+        /* Ascent animation when YES is clicked */
+        .ascend-sky {
+            transform: translateY(-1200px) scale(0.4) rotateZ(25deg) !important;
+            opacity: 0.1 !important;
+            transition: all 7s cubic-bezier(0.25, 1, 0.5, 1) !important;
+        }
+
+        /* Bed Surface & Rose Petals */
+        .bed-surface {
+            background: linear-gradient(to bottom, rgba(20, 10, 28, 0.92), rgba(8, 4, 12, 0.98));
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 -25px 60px rgba(0, 0, 0, 0.95);
+        }
+
+        .petal {
+            position: absolute;
+            background: radial-gradient(circle at 35% 35%, #ff2a55, #a7001e, #3b000a);
+            border-radius: 85% 0 60% 50% / 60% 0 85% 50%;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+            pointer-events: none;
+            transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1), opacity 3s ease;
+        }
+
+        .floating-heart-emoji {
+            position: fixed;
+            pointer-events: none;
+            z-index: 60;
+            animation: floatUpUp 4.5s linear forwards;
+        }
+
+        @keyframes floatUpUp {
+            0% {
+                transform: translateY(105vh) scale(0.4) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-25vh) scale(1.6) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* High-End Glassmorphism */
+        .glass-card {
+            background: rgba(18, 10, 28, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 50px rgba(225, 29, 72, 0.25);
+        }
+
+        /* Glowing Yes Button */
+        .btn-yes {
+            background: linear-gradient(135deg, #f43f5e 0%, #be123c 50%, #881337 100%);
+            box-shadow: 0 0 30px rgba(244, 63, 94, 0.7), inset 0 1px 0 rgba(255,255,255,0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-yes:hover {
+            box-shadow: 0 0 45px rgba(244, 63, 94, 0.95), inset 0 1px 0 rgba(255,255,255,0.6);
+            transform: scale(1.08);
+        }
+
+        /* Toast notification */
+        .toast-msg {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(30, 15, 40, 0.95);
+            border: 1px solid rgba(244, 63, 94, 0.5);
+            color: #ffe4e6;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            transition: all 0.4s ease;
+            opacity: 0;
+            z-index: 100;
+        }
+
+        .toast-msg.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="city-background min-h-screen flex flex-col justify-between relative">
+
+    <!-- Background Canvas for Ambient Particles -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <canvas id="ambientCanvas" class="w-full h-full opacity-70"></canvas>
+    </div>
+
+    <!-- Music Control Button -->
+    <div class="fixed top-5 right-5 z-50">
+        <button id="audioToggle" onclick="toggleAudio()" class="glass-card text-amber-200 px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2.5 hover:border-amber-400 transition-all duration-300">
+            <i id="audioIcon" class="fas fa-music text-rose-400"></i>
+            <span id="audioText">Play Romantic Music</span>
+        </button>
+    </div>
+
+    <!-- Toast Notification for playful "No" attempts -->
+    <div id="playfulToast" class="toast-msg text-xs sm:text-sm font-medium flex items-center gap-2">
+        <span>Nice try, my love! You can only say YES!</span> 💕
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="romanticAudio" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-guitars-112701.mp3" type="audio/mpeg">
+    </audio>
+
+    <main class="relative z-10 flex-grow flex flex-col items-center justify-center px-3 pt-10 pb-6">
+        
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <span class="text-xs sm:text-sm uppercase tracking-[0.35em] text-amber-300/80 font-cinzel font-bold">An Official Proposal For</span>
+            <h1 class="font-cursive text-5xl sm:text-7xl text-rose-400 drop-shadow-[0_0_20px_rgba(225,29,72,0.9)] mt-1">Abigail</h1>
+            <p class="text-amber-200/70 font-cinzel text-xs tracking-widest mt-1">(My Beautiful Abby)</p>
+        </div>
+
+        <!-- 3D LANTERNS CONTAINER (Spelling WILL YOU BE MY GIRLFRIEND, ABBY?) -->
+        <div id="lanternsContainer" class="lantern-stage flex flex-col items-center justify-center gap-2.5 sm:gap-3.5 my-2 transition-all duration-1000">
+            
+            <!-- ROW 1: WILL YOU BE -->
+            <div class="lantern-row flex-wrap">
+                <!-- WILL -->
+                <div class="flex gap-1 sm:gap-1.5">
+                    <div class="lantern-3d"><div class="lantern-box w-7 h-10 sm:w-11 sm:h-16"><span class="lantern-text text-sm sm:text-2xl">W</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-7 h-10 sm:w-11 sm:h-16"><span class="lantern-text text-sm sm:text-2xl">I</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-7 h-10 sm:w-11 sm:h-16"><span class="lantern-text text-sm sm:text-2xl">L</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-7 h-10 sm:w-11 sm:h-16"><span class="lantern-text text-sm sm:text-2xl">L</span></div></div>
+                </div>
+                <div class="w-1.5 sm:w-3"></div>
+                <!-- YOU -->
+                <div class="flex gap-1 sm:gap-1.5">
+                    <div class="lantern-3d"><div class="lantern-box w-7 h-10 sm:w-11 sm:h-16"><span class="lantern-text text-sm sm:text-2xl">Y</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-7 h-10 sm:w-11 sm:h-16"><span class="lantern-text text-sm sm:text-2xl">O</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-7 h-10 sm:w-11 sm:h-16"><span class="lantern-text text-sm sm:text-2xl">U</span></div></div>
+                </div>
+                <div class="w-1.5 sm:w-3"></div>
+                <!-- BE -->
+                <div class="flex gap-1 sm:gap-1.5">
+                    <div class="lantern-3d"><div class="lantern-box w-7 h-10 sm:w-11 sm:h-16"><span class="lantern-text text-sm sm:text-2xl">B</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-7 h-10 sm:w-11 sm:h-16"><span class="lantern-text text-sm sm:text-2xl">E</span></div></div>
+                </div>
+            </div>
+
+            <!-- ROW 2: MY GIRLFRIEND -->
+            <div class="lantern-row flex-wrap">
+                <!-- MY -->
+                <div class="flex gap-1 sm:gap-1.5">
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">M</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">Y</span></div></div>
+                </div>
+                <div class="w-2 sm:w-4"></div>
+                <!-- GIRLFRIEND -->
+                <div class="flex gap-1 sm:gap-1.5">
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">G</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">I</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">R</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">L</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">F</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">R</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">I</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">E</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">N</span></div></div>
+                    <div class="lantern-3d"><div class="lantern-box w-8 h-12 sm:w-12 sm:h-18"><span class="lantern-text text-base sm:text-3xl">D</span></div></div>
+                </div>
+            </div>
+
+            <!-- ROW 3: ABBY? -->
+            <div class="lantern-row justify-center mt-1">
+                <div class="lantern-3d"><div class="lantern-box w-10 h-14 sm:w-16 sm:h-20"><span class="lantern-text text-xl sm:text-4xl text-rose-950">A</span></div></div>
+                <div class="lantern-3d"><div class="lantern-box w-10 h-14 sm:w-16 sm:h-20"><span class="lantern-text text-xl sm:text-4xl text-rose-950">B</span></div></div>
+                <div class="lantern-3d"><div class="lantern-box w-10 h-14 sm:w-16 sm:h-20"><span class="lantern-text text-xl sm:text-4xl text-rose-950">B</span></div></div>
+                <div class="lantern-3d"><div class="lantern-box w-10 h-14 sm:w-16 sm:h-20"><span class="lantern-text text-xl sm:text-4xl text-rose-950">Y</span></div></div>
+                <div class="lantern-3d"><div class="lantern-box w-10 h-14 sm:w-16 sm:h-20"><span class="lantern-text text-xl sm:text-4xl text-rose-950">?</span></div></div>
+            </div>
+
+        </div>
+
+        <div id="interactiveSection" class="mt-8 mb-6 text-center w-full max-w-md relative min-h-[100px] flex items-center justify-center">
+            <div class="flex items-center justify-center gap-6 sm:gap-10 w-full relative">
+                
+                <!-- YES BUTTON -->
+                <button id="yesBtn" onclick="handleYesClick()" class="btn-yes text-white font-semibold text-lg sm:text-xl px-8 py-4 rounded-full flex items-center gap-3 cursor-pointer z-20">
+                    <span>Yes, forever!</span>
+                    <span class="text-2xl animate-pulse">💖</span>
+                </button>
+
+                <!-- NO BUTTON (Fleeing logic) -->
+                <button id="noBtn" class="bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 font-medium text-base sm:text-lg px-6 py-3.5 rounded-full border border-zinc-600/50 transition-all duration-150 z-20 flex items-center gap-2">
+                    <span>No</span>
+                    <span>🙈</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- SUCCESS PROPOSAL MESSAGE (Hidden initially) -->
+        <div id="responseContainer" class="hidden w-full max-w-2xl mt-4 px-2 z-30">
+            <div class="glass-card p-6 sm:p-10 rounded-3xl text-center relative overflow-hidden">
+                <!-- Glowing Accents -->
+                <div class="absolute -top-16 -right-16 w-40 h-40 bg-rose-500/25 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-16 -left-16 w-40 h-40 bg-amber-500/25 rounded-full blur-3xl"></div>
+
+                <div class="text-amber-400 font-cursive text-3xl sm:text-5xl mb-3">Forever & Always Yours...</div>
+                
+                <h3 class="font-cinzel text-2xl sm:text-3xl font-bold text-amber-200 mb-6">My Dearest Abigail (My Abby),</h3>
+                
+                <div class="space-y-4 text-zinc-200 text-sm sm:text-base leading-relaxed font-light text-justify sm:text-center">
+                    <p>
+                        From the moment we met, my life gained a warmth and light I never knew was missing. Being in your presence, holding you close, feeling your soft touch, and sharing our deep love together has shown me just how inseparable our hearts truly are.
+                    </p>
+                    <p>
+                        Every laugh we share, every tender kiss, and every moment in your arms fills my soul with pure passion and desire. My heart, my mind, and my future belong to you, my darling Abby.
+                    </p>
+                    <p class="font-semibold text-rose-300 pt-2 text-base sm:text-xl font-cinzel">
+                        Today, I officially ask you: Will you be my official girlfriend, my love, and walk this passionate, beautiful life journey with me forever?
+                    </p>
+                    <p class="text-amber-200/90 italic">
+                        I love you deeply, passionately, and completely.
+                    </p>
+                </div>
+
+                <div class="mt-8 pt-5 border-t border-amber-500/20 flex flex-col items-center">
+                    <span class="font-cursive text-2xl sm:text-3xl text-amber-300">With all my heart, love & passion,</span>
+                    <span class="font-cinzel text-xl tracking-widest text-zinc-100 font-bold mt-1">— WISDOM ❤️✨</span>
+                </div>
+
+                <!-- WhatsApp Reply CTA -->
+                <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="sendWhatsAppReply()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600 hover:from-emerald-500 hover:to-green-400 text-white font-bold px-8 py-4 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.6)] transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3 text-base sm:text-lg">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                        <span>Send Your Reply to Wisdom on WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bed Surface with 3D Glowing Red Rose Petals -->
+    <footer id="bedArea" class="bed-surface relative w-full py-8 sm:py-12 px-4 z-20 flex flex-col items-center justify-center overflow-hidden min-h-[140px]">
+        <div id="petalsContainer" class="absolute inset-0 pointer-events-none"></div>
+        
+        <p class="text-zinc-500 text-xs font-light tracking-wider relative z-10 text-center">
+            Designed with eternal devotion by <span class="text-amber-400 font-semibold">Wisdom</span> for <span class="text-rose-400 font-semibold">Abby</span> ❤️
+        </p>
+    </footer>
+
+    <script>
+        let audioPlaying = false;
+        let isAnswered = false;
+
+        // Toast Messages when trying to tap No
+        const playfulMessages = [
+            "Nice try, my love! You can only say YES! 💕",
+            "Uh-uh! 'No' isn't an option for us, Abby! 😘",
+            "You belong with me, my darling! Choose YES! 🔥",
+            "Wisdom loves you way too much to let you tap No! ❤️",
+            "The 'No' button is shy today! Say YES! ✨"
+        ];
+
+        function showToast() {
+            const toast = document.getElementById('playfulToast');
+            const randomMsg = playfulMessages[Math.floor(Math.random() * playfulMessages.length)];
+            toast.innerHTML = `<span>${randomMsg}</span>`;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Ambient Bokeh Particles Canvas
+        function initCanvas() {
+            const canvas = document.getElementById('ambientCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const particles = Array.from({ length: 45 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 0.8,
+                color: Math.random() > 0.4 ? 'rgba(255, 185, 50, ' : 'rgba(244, 63, 94, ',
+                alpha: Math.random() * 0.6 + 0.2,
+                speedY: -Math.random() * 0.5 - 0.2,
+                speedX: (Math.random() - 0.5) * 0.4
+            }));
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    if (p.y < 0) p.y = canvas.height;
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.x > canvas.width) p.x = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color + p.alpha + ')';
+                    ctx.fill();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+        }
+
+        // Generate 3D Rose Petals on Bed
+        function generatePetals() {
+            const container = document.getElementById('petalsContainer');
+            const petalCount = 55;
+
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal petal-item';
+                
+                const width = Math.random() * 14 + 10;
+                const height = width * (Math.random() * 0.4 + 0.8);
+                const left = Math.random() * 98;
+                const top = Math.random() * 85 + 5;
+                const rotation = Math.random() * 360;
+
+                petal.style.width = `${width}px`;
+                petal.style.height = `${height}px`;
+                petal.style.left = `${left}%`;
+                petal.style.top = `${top}%`;
+                petal.style.transform = `rotate(${rotation}deg)`;
+                
+                container.appendChild(petal);
+            }
+        }
+
+        // Fleeing "No" Button Logic
+        const noBtn = document.getElementById('noBtn');
+
+        function moveNoButton(e) {
+            if (isAnswered) return;
+            showToast();
+
+            const padding = 30;
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            const maxX = window.innerWidth - btnWidth - padding;
+            const maxY = window.innerHeight - btnHeight - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+            noBtn.style.zIndex = '9999';
+        }
+
+        noBtn.addEventListener('mouseenter', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton(e);
+        });
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveNoButton(e);
+        });
+
+        // Audio Handler
+        function toggleAudio() {
+            const audio = document.getElementById('romanticAudio');
+            const icon = document.getElementById('audioIcon');
+            const text = document.getElementById('audioText');
+
+            if (audioPlaying) {
+                audio.pause();
+                icon.className = "fas fa-music text-rose-400";
+                text.innerText = "Play Romantic Music";
+                audioPlaying = false;
+            } else {
+                audio.play().then(() => {
+                    icon.className = "fas fa-pause text-amber-400";
+                    text.innerText = "Pause Music";
+                    audioPlaying = true;
+                }).catch(err => {
+                    console.log("Audio play blocked by browser:", err);
+                });
+            }
+        }
+
+        // Handle Proposal Acceptance
+        function handleYesClick() {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            if (!audioPlaying) {
+                toggleAudio();
+            }
+
+            // Hide No Button
+            noBtn.style.display = 'none';
+
+            // Lanterns ascend into sky
+            const lanterns = document.getElementById('lanternsContainer');
+            lanterns.classList.add('ascend-sky');
+
+            // Hide button area
+            document.getElementById('interactiveSection').classList.add('hidden');
+
+            // Float Bed Petals upward into the night
+            const petals = document.querySelectorAll('.petal-item');
+            petals.forEach((petal, index) => {
+                setTimeout(() => {
+                    petal.style.transform = `translateY(-130vh) rotate(${Math.random() * 720}deg) scale(1.4)`;
+                    petal.style.opacity = '0';
+                }, index * 30);
+            });
+
+            // Trigger Heart Emoji Explosion & Gold Confetti
+            triggerHeartsAndConfetti();
+
+            // Display Official Proposal Card
+            setTimeout(() => {
+                const responseBox = document.getElementById('responseContainer');
+                responseBox.classList.remove('hidden');
+                responseBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 1200);
+        }
+
+        // Heart Emojis & Confetti Generator
+        function triggerHeartsAndConfetti() {
+            const count = 250;
+            const defaults = { origin: { y: 0.85 } };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            fire(0.25, { spread: 30, startVelocity: 60, colors: ['#ff0055', '#ffb300', '#ffffff'] });
+            fire(0.2, { spread: 70, colors: ['#e11d48', '#fbbf24', '#f43f5e'] });
+            fire(0.35, { spread: 110, decay: 0.91, scalar: 1 });
+            fire(0.1, { spread: 130, startVelocity: 30, decay: 0.92, colors: ['#ffe4e6', '#ff1493', '#ff8c00'] });
+
+            const heartEmojis = ['❤️', '💖', '💕', '🔥', '💋', '✨', '🥰', '🌹'];
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'floating-heart-emoji';
+                    emoji.innerText = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    emoji.style.left = `${Math.random() * 95}vw`;
+                    emoji.style.fontSize = `${Math.random() * 2 + 1.5}rem`;
+                    emoji.style.animationDuration = `${Math.random() * 3.5 + 3}s`;
+                    document.body.appendChild(emoji);
+
+                    setTimeout(() => emoji.remove(), 5500);
+                }, i * 100);
+            }
+        }
+
+        // WhatsApp Direct Link with blockquote formatting
+        function sendWhatsAppReply() {
+            const phoneNumber = "233531817576";
+            const quoteText = "> Yes Wisdom, I love you so much! I say YES to being your official girlfriend! 💖✨🌹";
+            const encodedText = encodeURIComponent(quoteText);
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedText}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Window load initializer
+        window.onload = function() {
+            initCanvas();
+            generatePetals();
+        };
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+
+<body>
+  
+</body>
+
+</html>
